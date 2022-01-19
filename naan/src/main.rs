@@ -12,16 +12,17 @@ struct Cli {
     path: std::path::PathBuf,
 }
 
-fn main() {
+#[derive(Debug)]
+struct NoClueMate(String);
+
+fn main() -> Result<(), NoClueMate> {
 
     let args = Cli::parse();
+    
     let content = std::fs::read_to_string(&args.path)
-        .expect("Could not read file.");
+        .map_err(|err| NoClueMate(format!("Error! Cannot read file, mate. {}", err)))?;
     
-    for line in content.lines() {
-        if line.contains(&args.pattern) {
-            println!("{}", line);
-        }
-    }
-    
+    println!{"Content: \n{}", content}
+
+    Ok(())    
 }
